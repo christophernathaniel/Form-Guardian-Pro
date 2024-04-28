@@ -1,19 +1,67 @@
 .form-guardian-theme-basic {
+    font-family: sans-serif;
 
-}
+    input, textarea, select {
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
 
-.form-guardian-theme-basic fieldset {
+    textarea {
+        min-height: 200px;
+    }
+
+   
+
+    legend {
+
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+
+        > span:first-child {
+            margin-bottom: 10px;
+        }
+
+        input {
+
+        }
+    }
+
+    fieldset {
+        border: none;
+        margin-bottom: 20px;
+
+        legend {
+            margin-bottom: 10px;
+        }
+
+        label {
+            flex-direction: row;
+            margin-bottom: 10px;
+       
+
+            input {
+             
+            }
+        }
+    }
+
+    input[type="submit"] {
+        padding-left: 30px;
+        padding-right: 30px;
+        border-radius: 10px;
+    }
+
+    .required {
+        color: red;
+    }
     
 }
 
-.form-guardian-theme-basic input {
-    
-}
-
-.form-guardian-theme-basic select {
-    
-}
-
-.form-guardian-theme-basic textarea {
-    
-}

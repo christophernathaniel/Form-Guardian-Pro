@@ -7,12 +7,12 @@ var path = require("path");
 // change these variables to fit your project
 const jsPath = "./src";
 const cssPath = "./src";
-const outputPath = "static";
+const outputPath = "themes";
 
 const entryPoints = {
   // 'app' is the output name, people commonly use 'bundle'
   // you can have more than 1 entry point
-  base: cssPath + "/basic.scss",
+  basic: cssPath + "/basic.scss",
   admin: cssPath + "/admin.scss",
   'no-theme': cssPath + "/no-theme.scss",
 };

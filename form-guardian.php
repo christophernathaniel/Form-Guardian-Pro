@@ -17,7 +17,7 @@ function form_guardian_post_type()
 {
     $args = array(
         'public' => true,
-        'label'  => 'Forms',
+        'label'  => 'Form Guardian',
         'supports' => array('title', 'editor'),
         'has_archive' => true,
         'rewrite' => array('slug' => 'form-guardian'),
