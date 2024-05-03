@@ -62,6 +62,7 @@ function form_guardian_shortcode($atts)
 
     $theme = get_post_meta($atts['id'], '_form_guardian_theme', true);
 
+    $form_content = preg_replace('/(<br\s*\/?>\s*){2,}/', '', $form_content);
 
     return '<div class="form-guardian form-guardian-theme-' . $theme . '"><form action="' . esc_url(home_url("/form-guardian_submission/")) . '" method="post" id="form_submit_' . $atts['id'] . '">'
         . '<input type="hidden" name="form_guardian_submission" value="1"><input type="hidden" name="form_id" value="' . $atts['id'] . '">'
@@ -223,7 +224,9 @@ function register_form_guardian_submission_endpoint()
 {
     add_rewrite_rule('^form-guardian_submission/?$', 'index.php?form_guardian_submission=1', 'top');
 }
+
 add_action('init', 'register_form_guardian_submission_endpoint');
+
 
 // Handle form submission for the custom endpoint
 add_action('template_redirect', 'handle_form_guardian_submission');
@@ -262,16 +265,17 @@ function handle_form_guardian_submission()
             $subject = get_post_meta($form_id, '_form_guardian_subject', true);
             $sent = wp_mail($to_email, $subject, $email_message);
 
+            $selected_page_id = get_post_meta($form_id, '_form_guardian_page_id', true);
             // Check if email was sent successfully
-            if ($sent) {
-                // Redirect after successful form submission
-                wp_redirect(home_url('/thank-you/')); // Redirect to thank you page
-                exit;
-            } else {
-                // Redirect after failed form submission
-                wp_redirect(home_url('/error/')); // Redirect to error page
-                exit;
-            }
+            // if ($sent) {
+            // Redirect after successful form submission
+            wp_redirect(get_permalink($selected_page_id)); // Redirect to thank you page
+            exit;
+            // } else {
+            //     // Redirect after failed form submission
+            //     wp_redirect(home_url('/error/')); // Redirect to error page
+            //     exit;
+            // }
         }
     }
 }
