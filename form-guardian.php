@@ -2,7 +2,7 @@
 /*
 Plugin Name: Form Guardian
 Description: A wordpress plugin to handle forms and submissions.
-Version: 1.0.2
+Version: 1.0.3
 Author: Christopher Nathaniel
 Author URI: https://creativenebula.co.uk
 */
