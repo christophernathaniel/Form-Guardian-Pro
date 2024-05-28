@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - live
+name: Deploy plugin on push
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Push files
+      remote_dir: "/var/www/html/wp-content/plugins/form-guardian"
+      uses: christophernathaniel/Form-Guardian-Pro@live
+      with:
+        server: 159.223.246.109
+        username: root
+        password: ${{ secrets.ftp_password }}
+        ftp_ssl_allow: "true"
+        max_retries: "7"

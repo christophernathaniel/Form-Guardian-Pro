@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Form Guardian
-Description: A plugin to handle forms
-Version: 1.0.0
+Description: A wordpress plugin to handle forms and submissions.
+Version: 1.0.2
 Author: Christopher Nathaniel
-Author URI: https://christophernathaniel.co.uk
+Author URI: https://creativenebula.co.uk
 */
 
 // if accessed directly, exit
