@@ -1,19 +1,31 @@
+name: Deploy plugin on push
+
 on:
   push:
     branches:
       - live
-name: Deploy plugin on push
+
 jobs:
-  web-deploy:
-    name: Deploy
+  deploy:
+    name: Deploy Everything
     runs-on: ubuntu-latest
+    
     steps:
-    - name: Push files
-      remote_dir: "/var/www/html/wp-content/plugins/form-guardian"
-      uses: christophernathaniel/Form-Guardian-Pro@live
-      with:
-        server: 159.223.246.109
-        username: root
-        password: ${{ secrets.ftp_password }}
-        ftp_ssl_allow: "true"
-        max_retries: "7"
+    - name: Checkout code
+      uses: actions/checkout@v2  # This step clones your repository code into the runner
+    
+    - name: Create SSH directory and known_hosts file
+      run: |
+        mkdir -p ~/.ssh
+        touch ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts
+      
+    - name: Add host key to known_hosts
+      run: ssh-keyscan -H 159.223.246.109 >> ~/.ssh/known_hosts
+      
+    - name: Install sshpass
+      run: sudo apt-get update && sudo apt-get install -y sshpass
+      
+    - name: Deploy using SSH
+      run: |
+        sshpass -p "${{ secrets.ftp_password }}" scp -o StrictHostKeyChecking=no -r $GITHUB_WORKSPACE/* root@159.223.246.109:/var/www/html/wp-content/plugins/form-guardian/
