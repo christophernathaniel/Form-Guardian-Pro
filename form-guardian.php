@@ -12,6 +12,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+
+
 // Register Post Type
 function form_guardian_post_type()
 {
@@ -332,6 +334,8 @@ function enqueue_admin_css()
 add_action('admin_enqueue_scripts', 'enqueue_admin_js');
 function enqueue_admin_js($hook)
 {
+    global $typenow;
+    
     // Enqueue JavaScript only on the edit screen of the 'form-guardian' post type
     if ('post.php' === $hook || 'post-new.php' === $hook) {
         global $post;
@@ -343,4 +347,25 @@ function enqueue_admin_js($hook)
             wp_enqueue_script('admin_js', $admin_js_file_path, array('jquery'), null, true);
         }
     }
+
+   
+    // if( ! in_array( $typenow, array( 'post', 'page', 'form-guardian' ) ) )
+        // return;
+
+    // Checks if the current page is the WYSIWYG editor
+    if (get_current_screen()->base == 'post') {
+        wp_enqueue_script(
+            'form_guardian_tinymce_forms',
+            plugin_dir_url(__FILE__) . 'tinymce-forms.js',
+            array('wp-tinymce'), // Make sure it loads after TinyMCE
+            '1.0.0',
+            true
+        );
+    }
 }
+
+
+
+
+
+
