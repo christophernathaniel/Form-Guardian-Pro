@@ -96,14 +96,6 @@ add_filter('edit_form_after_title', 'insert_shortcode_example_into_page_editor')
 
 
 
-
-
-
-
-
-
-
-
 // Add meta box for 'form-guardian' custom post type
 function add_form_guardian_meta_box()
 {
@@ -175,8 +167,6 @@ function render_form_guardian_meta_box($post)
 }
 
 
-
-
 // Save meta box data
 function save_form_guardian_meta_box($post_id)
 {
@@ -219,18 +209,16 @@ add_action('save_post_form-guardian', 'save_form_guardian_meta_box');
 
 
 
-
-
 // Register custom endpoint
 function register_form_guardian_submission_endpoint()
 {
     add_rewrite_rule('^form-guardian_submission/?$', 'index.php?form_guardian_submission=1', 'top');
 }
-
 add_action('init', 'register_form_guardian_submission_endpoint');
 
 
-// Handle form submission for the custom endpoint
+
+
 add_action('template_redirect', 'handle_form_guardian_submission');
 function handle_form_guardian_submission()
 {
@@ -241,23 +229,17 @@ function handle_form_guardian_submission()
     }
 
     if (isset($_POST['form_guardian_submission'])) {
-        // Handle form submission
         if (isset($_POST['submit_form'])) {
             // Process form submission
             $form_id = isset($_POST['form_id']) ? intval($_POST['form_id']) : 0; // Assuming the form ID is submitted along with the form
-
-            // Construct email message
             $email_message = "Form ID: $form_id\n\n"; // Include the form ID in the email message
 
             // Iterate through all submitted form fields and include them in the email message
             foreach ($_POST as $field_name => $field_value) {
-                // Exclude special fields like 'submit_form', 'form_id', and 'form_guardian_submission'
                 if ($field_name !== 'submit_form' && $field_name !== 'form_id' && $field_name !== 'form_guardian_submission') {
-                    // Sanitize field name and value
+                    // Sanitize
                     $sanitized_field_name = sanitize_text_field($field_name);
                     $sanitized_field_value = sanitize_text_field($field_value);
-
-                    // Include field name and value in the email message
                     $email_message .= "$sanitized_field_name: $sanitized_field_value\n";
                 }
             }
@@ -288,18 +270,13 @@ function handle_form_guardian_submission()
 add_action('wp_enqueue_scripts', 'enqueue_all_form_css');
 function enqueue_all_form_css()
 {
-    // Query for all form posts
     $form_posts = get_posts(array(
-        'post_type' => 'form-guardian', // Assuming 'form-guardian' is your custom post type
-        'posts_per_page' => -1, // Get all posts
+        'post_type' => 'form-guardian',
+        'posts_per_page' => -1, 
     ));
 
-    // Loop through each form post
     foreach ($form_posts as $form_post) {
-        // Get the theme value for the current form
         $theme = get_post_meta($form_post->ID, '_form_guardian_theme', true);
-
-        // Enqueue the corresponding CSS file
         enqueue_form_css($theme);
     }
 }
@@ -309,10 +286,7 @@ function enqueue_all_form_css()
 // ENQUEUE CSS file based on the selected theme
 function enqueue_form_css($theme)
 {
-    // Define the CSS file path based on the selected theme
     $css_file_path = plugin_dir_url(__FILE__) . 'themes/' . $theme . '.css';
-
-    // Enqueue the CSS file
     wp_enqueue_style('form_theme_' . $theme, $css_file_path, array(), filemtime(plugin_dir_path(__FILE__) . 'themes/' . $theme . '.css'));
 }
 
@@ -320,13 +294,9 @@ function enqueue_form_css($theme)
 add_action('admin_enqueue_scripts', 'enqueue_admin_css');
 function enqueue_admin_css()
 {
-    // Define the admin CSS file path
     $admin_css_file_path = plugin_dir_url(__FILE__) . 'admin.css';
-
-    // Enqueue the admin CSS file
     wp_enqueue_style('admin_css', $admin_css_file_path);
 }
-
 
 
 
@@ -335,29 +305,23 @@ add_action('admin_enqueue_scripts', 'enqueue_admin_js');
 function enqueue_admin_js($hook)
 {
     global $typenow;
-    
-    // Enqueue JavaScript only on the edit screen of the 'form-guardian' post type
+
     if ('post.php' === $hook || 'post-new.php' === $hook) {
         global $post;
         if ($post && 'form-guardian' === $post->post_type) {
-            // Define the JavaScript file path
             $admin_js_file_path = plugin_dir_url(__FILE__) . 'admin.js';
-
-            // Enqueue the JavaScript file
             wp_enqueue_script('admin_js', $admin_js_file_path, array('jquery'), null, true);
         }
     }
-
    
-    // if( ! in_array( $typenow, array( 'post', 'page', 'form-guardian' ) ) )
-        // return;
+    if( ! in_array( $typenow, array( 'post', 'page', 'form-guardian' ) ) )
+        return;
 
-    // Checks if the current page is the WYSIWYG editor
     if (get_current_screen()->base == 'post') {
         wp_enqueue_script(
             'form_guardian_tinymce_forms',
             plugin_dir_url(__FILE__) . 'tinymce-forms.js',
-            array('wp-tinymce'), // Make sure it loads after TinyMCE
+            array('wp-tinymce'),
             '1.0.0',
             true
         );
